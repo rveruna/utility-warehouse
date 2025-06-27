@@ -1,33 +1,19 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-
-const categories = ["Theft", "Accidental Damage", "Loss"];
+import { useSubmitClaim } from "../hooks/useSubmitClaim";
+import type { Claim } from "../types";
+import { categories } from "../constants.ts";
 
 export function ClaimsForm() {
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
-  const [submittedClaims, setSubmittedClaims] = useState<
-    { date: string; category: string; description: string }[]
-  >([]);
+  const [submittedClaims, setSubmittedClaims] = useState<Claim[]>([]);
 
-  const mutation = useMutation({
-    mutationFn: (data: {
-      date: string;
-      category: string;
-      description: string;
-    }) => axios.post("/api/submit-claim", data),
-    onSuccess: (_, variables) => {
-      console.log("[debug] ✅ Claim submitted successfully");
-      setSubmittedClaims((prev) => [...prev, variables]);
-      setDate("");
-      setCategory("");
-      setDescription("");
-    },
-    onError: (err) => {
-      console.error("[debug] ❌ Failed to submit claim:", err);
-    },
+  const mutation = useSubmitClaim((claim) => {
+    setSubmittedClaims((prev) => [...prev, claim]);
+    setDate("");
+    setCategory("");
+    setDescription("");
   });
 
   const handleSubmit = (e: React.FormEvent) => {
