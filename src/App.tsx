@@ -1,12 +1,11 @@
 import "./App.css";
+import { ClaimsForm } from "./components/ClaimsForm";
 
 function App() {
   return (
-    <>
-      <div className="card">
-        <p>hello world</p>
-      </div>
-    </>
+    <main>
+      <ClaimsForm />
+    </main>
   );
 }
 

@@ -1,0 +1,71 @@
+.claims-container {
+  background-color: #fff;
+  padding: 2rem;
+  max-width: 500px;
+  margin: 4rem auto;
+  border-radius: 8px;
+  font-family: system-ui, sans-serif;
+  color: #000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.claims-title {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.claims-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.claims-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.claims-label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.claims-input,
+.claims-select,
+.claims-textarea {
+  padding: 0.6rem;
+  border: 1px solid #333;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.claims-textarea {
+  min-height: 80px;
+}
+
+.claims-button {
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.claims-list {
+  margin-top: 2rem;
+}
+
+.claims-list h2 {
+  font-size: 1.2rem;
+}
+
+.claims-list ul {
+  padding-left: 1.2rem;
+}
+
+.claims-list li {
+  margin-bottom: 0.5rem;
+}
