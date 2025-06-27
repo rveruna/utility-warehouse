@@ -2,6 +2,7 @@ import { renderHook } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import { useSubmitClaim } from "../useSubmitClaim";
+import type { Claim } from "../../types";
 
 jest.spyOn(console, "log").mockImplementation(() => {});
 jest.spyOn(console, "error").mockImplementation(() => {});
@@ -14,7 +15,8 @@ const wrapper = ({ children }: { children: React.ReactNode }) => {
 };
 
 test("calls onSuccess with claim data when submission succeeds", async () => {
-  const mockClaim = {
+  const mockClaim: Claim = {
+    id: "test-id",
     date: "2025-06-27",
     category: "Loss",
     description: "Broken window",
@@ -42,6 +44,7 @@ test("calls onError when submission fails", async () => {
 
   await expect(
     result.current.mutateAsync({
+      id: "test-id",
       date: "2025-06-27",
       category: "Loss",
       description: "Something",

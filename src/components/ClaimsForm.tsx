@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { v4 as uuid } from "uuid";
 import { useSubmitClaim } from "../hooks/useSubmitClaim";
-import type { Claim } from "../types";
+import type { Claim, ClaimCategory } from "../types";
 import { categories } from "../constants.ts";
 
 export function ClaimsForm() {
@@ -10,7 +11,8 @@ export function ClaimsForm() {
   const [submittedClaims, setSubmittedClaims] = useState<Claim[]>([]);
 
   const mutation = useSubmitClaim((claim) => {
-    setSubmittedClaims((prev) => [...prev, claim]);
+    const enrichedClaim: Claim = { ...claim, id: uuid() };
+    setSubmittedClaims((prev) => [...prev, enrichedClaim]);
     setDate("");
     setCategory("");
     setDescription("");
@@ -18,7 +20,13 @@ export function ClaimsForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate({ date, category, description });
+
+    mutation.mutate({
+      date,
+      category: category as ClaimCategory,
+      description,
+      id: "",
+    });
   };
 
   return (
@@ -53,7 +61,9 @@ export function ClaimsForm() {
           >
             <option value="">Select...</option>
             {categories.map((cat) => (
-              <option key={cat}>{cat}</option>
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
             ))}
           </select>
         </div>
@@ -90,8 +100,8 @@ export function ClaimsForm() {
         <div className="claims-list">
           <h2>Existing Claims</h2>
           <ul>
-            {submittedClaims.map((claim, index) => (
-              <li key={index}>
+            {submittedClaims.map((claim) => (
+              <li key={claim.id}>
                 <strong>
                   {claim.date} {claim.category}
                 </strong>
