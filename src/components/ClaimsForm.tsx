@@ -2,6 +2,7 @@ import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { useSubmitClaim } from "../hooks/useSubmitClaim";
 import { claimCategoryValues, type Claim, type ClaimCategory } from "../types";
+import "./ClaimsForm.css";
 
 export function ClaimsForm() {
   const [date, setDate] = useState("");
