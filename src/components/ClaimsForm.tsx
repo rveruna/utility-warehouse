@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { useSubmitClaim } from "../hooks/useSubmitClaim";
-import type { Claim, ClaimCategory } from "../types";
-import { categories } from "../constants.ts";
+import { claimCategoryValues, type Claim, type ClaimCategory } from "../types";
 
 export function ClaimsForm() {
   const [date, setDate] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<ClaimCategory | "">("");
   const [description, setDescription] = useState("");
   const [submittedClaims, setSubmittedClaims] = useState<Claim[]>([]);
 
@@ -55,12 +54,11 @@ export function ClaimsForm() {
           <select
             id="category"
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => setCategory(e.target.value as ClaimCategory)}
             required
-            className="claims-select"
           >
             <option value="">Select...</option>
-            {categories.map((cat) => (
+            {claimCategoryValues.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
               </option>

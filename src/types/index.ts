@@ -1,15 +1,15 @@
 export type ClaimCategory = "Theft" | "Loss" | "Damage" | "Delay";
 
-export const ClaimCategoryValues: ClaimCategory[] = [
+export const claimCategoryValues: ClaimCategory[] = [
   "Theft",
   "Loss",
   "Damage",
   "Delay",
 ];
 
-export interface Claim {
+export type Claim = {
   id: string;
   date: string;
   category: ClaimCategory;
   description: string;
-}
+};
