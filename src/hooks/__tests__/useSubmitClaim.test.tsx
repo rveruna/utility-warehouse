@@ -3,6 +3,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import { useSubmitClaim } from "../useSubmitClaim";
 
+jest.spyOn(console, "log").mockImplementation(() => {});
+jest.spyOn(console, "error").mockImplementation(() => {});
+
 jest.mock("axios");
 
 const wrapper = ({ children }: { children: React.ReactNode }) => {
