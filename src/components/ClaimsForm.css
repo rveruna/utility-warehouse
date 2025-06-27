@@ -18,7 +18,6 @@
 .claims-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
 .claims-field {
@@ -74,4 +73,10 @@
 
 .claim-row:last-child {
   margin-bottom: 0;
+}
+
+.claims-error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 4px;
 }

@@ -9,6 +9,10 @@ export function ClaimsForm() {
   const [description, setDescription] = useState("");
   const [submittedClaims, setSubmittedClaims] = useState<Claim[]>([]);
 
+  const [dateError, setDateError] = useState("");
+  const [categoryError, setCategoryError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+
   const mutation = useSubmitClaim((claim) => {
     const enrichedClaim: Claim = { ...claim, id: uuid() };
     setSubmittedClaims((prev) => [...prev, enrichedClaim]);
@@ -19,6 +23,26 @@ export function ClaimsForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    let valid = true;
+    setDateError("");
+    setCategoryError("");
+    setDescriptionError("");
+
+    if (!date) {
+      setDateError("Date is required");
+      valid = false;
+    }
+    if (!category) {
+      setCategoryError("Category is required");
+      valid = false;
+    }
+    if (!description) {
+      setDescriptionError("Description is required");
+      valid = false;
+    }
+
+    if (!valid) return;
 
     mutation.mutate({
       date,
@@ -32,7 +56,7 @@ export function ClaimsForm() {
     <div className="claims-container">
       <h1 className="claims-title">Claims Handling Form</h1>
 
-      <form className="claims-form" onSubmit={handleSubmit}>
+      <form className="claims-form" onSubmit={handleSubmit} noValidate>
         <div className="claims-field">
           <label htmlFor="date" className="claims-label">
             Claim Date
@@ -45,6 +69,9 @@ export function ClaimsForm() {
             required
             className="claims-input"
           />
+          <p id="date-error" className="claims-error">
+            {dateError || "\u00A0"}
+          </p>
         </div>
 
         <div className="claims-field">
@@ -56,6 +83,7 @@ export function ClaimsForm() {
             value={category}
             onChange={(e) => setCategory(e.target.value as ClaimCategory)}
             required
+            className="claims-select"
           >
             <option value="">Select...</option>
             {claimCategoryValues.map((cat) => (
@@ -64,6 +92,9 @@ export function ClaimsForm() {
               </option>
             ))}
           </select>
+          <p id="category-error" className="claims-error">
+            {categoryError || "\u00A0"}
+          </p>
         </div>
 
         <div className="claims-field">
@@ -77,6 +108,9 @@ export function ClaimsForm() {
             required
             className="claims-textarea"
           />
+          <p id="description-error" className="claims-error">
+            {descriptionError || "\u00A0"}
+          </p>
         </div>
 
         <button
