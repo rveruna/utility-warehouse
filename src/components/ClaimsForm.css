@@ -56,16 +56,22 @@
 
 .claims-list {
   margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.claims-list h2 {
-  font-size: 1.2rem;
+.claim-entry {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  background-color: #f9f9f9;
 }
 
-.claims-list ul {
-  padding-left: 1.2rem;
-}
-
-.claims-list li {
+.claim-row {
   margin-bottom: 0.5rem;
+}
+
+.claim-row:last-child {
+  margin-bottom: 0;
 }
