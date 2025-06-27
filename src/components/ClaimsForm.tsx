@@ -30,17 +30,33 @@ export function ClaimsForm() {
     setCategoryError("");
     setDescriptionError("");
 
+    const dateInput = document.getElementById("date") as HTMLInputElement;
+    const categoryInput = document.getElementById(
+      "category"
+    ) as HTMLSelectElement;
+    const descriptionInput = document.getElementById(
+      "description"
+    ) as HTMLTextAreaElement;
+
     if (!date) {
       setDateError("Date is required");
+      dateInput?.focus();
       valid = false;
+      return;
     }
+
     if (!category) {
       setCategoryError("Category is required");
+      categoryInput?.focus();
       valid = false;
+      return;
     }
+
     if (!description) {
       setDescriptionError("Description is required");
+      descriptionInput?.focus();
       valid = false;
+      return;
     }
 
     if (!valid) return;
@@ -55,9 +71,16 @@ export function ClaimsForm() {
 
   return (
     <div className="claims-container">
-      <h1 className="claims-title">Claims Handling Form</h1>
+      <h1 id="form-heading" className="claims-title">
+        Claims Handling Form
+      </h1>
 
-      <form className="claims-form" onSubmit={handleSubmit} noValidate>
+      <form
+        aria-labelledby="form-heading"
+        className="claims-form"
+        onSubmit={handleSubmit}
+        noValidate
+      >
         <div className="claims-field">
           <label htmlFor="date" className="claims-label">
             Claim Date
@@ -69,8 +92,14 @@ export function ClaimsForm() {
             onChange={(e) => setDate(e.target.value)}
             required
             className="claims-input"
+            aria-describedby="date-error"
+            aria-invalid={!!dateError}
           />
-          <p id="date-error" className="claims-error">
+          <p
+            id="date-error"
+            className="claims-error"
+            role={dateError ? "alert" : undefined}
+          >
             {dateError || "\u00A0"}
           </p>
         </div>
@@ -85,6 +114,8 @@ export function ClaimsForm() {
             onChange={(e) => setCategory(e.target.value as ClaimCategory)}
             required
             className="claims-select"
+            aria-describedby="category-error"
+            aria-invalid={!!categoryError}
           >
             <option value="">Select...</option>
             {claimCategoryValues.map((cat) => (
@@ -93,7 +124,11 @@ export function ClaimsForm() {
               </option>
             ))}
           </select>
-          <p id="category-error" className="claims-error">
+          <p
+            id="category-error"
+            className="claims-error"
+            role={categoryError ? "alert" : undefined}
+          >
             {categoryError || "\u00A0"}
           </p>
         </div>
@@ -108,8 +143,14 @@ export function ClaimsForm() {
             onChange={(e) => setDescription(e.target.value)}
             required
             className="claims-textarea"
+            aria-describedby="description-error"
+            aria-invalid={!!descriptionError}
           />
-          <p id="description-error" className="claims-error">
+          <p
+            id="description-error"
+            className="claims-error"
+            role={descriptionError ? "alert" : undefined}
+          >
             {descriptionError || "\u00A0"}
           </p>
         </div>
@@ -124,7 +165,7 @@ export function ClaimsForm() {
       </form>
 
       {mutation.isError && (
-        <div className="claims-error">
+        <div className="claims-error" role="alert">
           Something went wrong. Please try again.
         </div>
       )}

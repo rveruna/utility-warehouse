@@ -22,29 +22,29 @@ describe("ClaimsForm", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
   test("renders all form fields and the submit button", () => {
     renderWithQueryClient();
 
-    expect(screen.getByLabelText(/claim date/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/category/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
+    expect(screen.getByLabelText("Claim Date")).toBeInTheDocument();
+    expect(screen.getByLabelText("Category")).toBeInTheDocument();
+    expect(screen.getByLabelText("Description")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument();
   });
 
   test("submits form with valid data", async () => {
     const user = userEvent.setup();
 
-    // 👇 This is the correct Jest syntax (not vi.Mock)
     (axios.post as jest.Mock).mockResolvedValueOnce({
       data: { message: "Claim recorded" },
     });
 
     renderWithQueryClient();
 
-    await user.type(screen.getByLabelText(/claim date/i), "2025-06-27");
-    await user.selectOptions(screen.getByLabelText(/category/i), "Theft");
+    await user.type(screen.getByLabelText("Claim Date"), "2025-06-27");
+    await user.selectOptions(screen.getByLabelText("Category"), "Theft");
     await user.type(
-      screen.getByLabelText(/description/i),
+      screen.getByLabelText("Description"),
       "Lost phone during travel"
     );
 
@@ -59,7 +59,6 @@ describe("ClaimsForm", () => {
     const handlePost = jest.spyOn(axios, "post").mockClear();
 
     renderWithQueryClient();
-
     await user.click(screen.getByRole("button", { name: /submit/i }));
 
     expect(handlePost).not.toHaveBeenCalled();
@@ -72,10 +71,10 @@ describe("ClaimsForm", () => {
 
     renderWithQueryClient();
 
-    await user.type(screen.getByLabelText(/claim date/i), "2025-06-27");
-    await user.selectOptions(screen.getByLabelText(/category/i), "Loss");
+    await user.type(screen.getByLabelText("Claim Date"), "2025-06-27");
+    await user.selectOptions(screen.getByLabelText("Category"), "Loss");
     await user.type(
-      screen.getByLabelText(/description/i),
+      screen.getByLabelText("Description"),
       "Dropped phone in river"
     );
 
@@ -94,10 +93,10 @@ describe("ClaimsForm", () => {
 
     renderWithQueryClient();
 
-    await user.type(screen.getByLabelText(/claim date/i), "2025-06-27");
-    await user.selectOptions(screen.getByLabelText(/category/i), "Theft");
+    await user.type(screen.getByLabelText("Claim Date"), "2025-06-27");
+    await user.selectOptions(screen.getByLabelText("Category"), "Theft");
     await user.type(
-      screen.getByLabelText(/description/i),
+      screen.getByLabelText("Description"),
       "Stolen laptop from car"
     );
 
@@ -115,9 +114,9 @@ describe("ClaimsForm", () => {
 
     renderWithQueryClient();
 
-    await user.type(screen.getByLabelText(/claim date/i), "2025-06-27");
-    await user.selectOptions(screen.getByLabelText(/category/i), "Theft");
-    await user.type(screen.getByLabelText(/description/i), "Slow network test");
+    await user.type(screen.getByLabelText("Claim Date"), "2025-06-27");
+    await user.selectOptions(screen.getByLabelText("Category"), "Theft");
+    await user.type(screen.getByLabelText("Description"), "Slow network test");
 
     await user.click(screen.getByRole("button", { name: /submit/i }));
     expect(screen.getByText(/submitting/i)).toBeInTheDocument();
@@ -128,7 +127,8 @@ describe("ClaimsForm", () => {
     const spy = jest.spyOn(axios, "post");
 
     renderWithQueryClient();
-    await user.type(screen.getByLabelText(/claim date/i), "2025-06-27");
+
+    await user.type(screen.getByLabelText("Claim Date"), "2025-06-27");
     await user.click(screen.getByRole("button", { name: /submit/i }));
 
     expect(spy).not.toHaveBeenCalled();
