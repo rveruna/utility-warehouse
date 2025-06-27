@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 const categories = ["Theft", "Accidental Damage", "Loss"];
 
@@ -9,32 +11,28 @@ export function ClaimsForm() {
   const [submittedClaims, setSubmittedClaims] = useState<
     { date: string; category: string; description: string }[]
   >([]);
-  const [, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch("/api/submit-claim", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date, category, description }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to submit claim");
-      }
-
-      console.log("[debug] Claim submitted successfully");
-      setSubmittedClaims((prev) => [...prev, { date, category, description }]);
+  const mutation = useMutation({
+    mutationFn: (data: {
+      date: string;
+      category: string;
+      description: string;
+    }) => axios.post("/api/submit-claim", data),
+    onSuccess: (_, variables) => {
+      console.log("[debug] ✅ Claim submitted successfully");
+      setSubmittedClaims((prev) => [...prev, variables]);
       setDate("");
       setCategory("");
       setDescription("");
-      setError(null);
-    } catch (err) {
-      console.error("[debug] Failed to submit claim:", err);
-      setError("Submission failed. Please try again.");
-    }
+    },
+    onError: (err) => {
+      console.error("[debug] ❌ Failed to submit claim:", err);
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutation.mutate({ date, category, description });
   };
 
   return (
@@ -87,27 +85,37 @@ export function ClaimsForm() {
           />
         </div>
 
-        <button type="submit" className="claims-button">
-          Submit
+        <button
+          type="submit"
+          className="claims-button"
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending ? "Submitting..." : "Submit"}
         </button>
       </form>
 
-      <div className="claims-list">
-        <h2>Existing Claims</h2>
-        {submittedClaims.map((claim, index) => (
-          <div key={index} className="claim-entry">
-            <div className="claim-row">
-              <strong>Date:</strong> {claim.date}
-            </div>
-            <div className="claim-row">
-              <strong>Category:</strong> {claim.category}
-            </div>
-            <div className="claim-row">
-              <strong>Description:</strong> {claim.description}
-            </div>
-          </div>
-        ))}
-      </div>
+      {mutation.isError && (
+        <div className="claims-error">
+          Something went wrong. Please try again.
+        </div>
+      )}
+
+      {submittedClaims.length > 0 && (
+        <div className="claims-list">
+          <h2>Existing Claims</h2>
+          <ul>
+            {submittedClaims.map((claim, index) => (
+              <li key={index}>
+                <strong>
+                  {claim.date} {claim.category}
+                </strong>
+                <br />
+                {claim.description}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
