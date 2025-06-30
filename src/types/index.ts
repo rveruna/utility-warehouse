@@ -1,11 +1,10 @@
-export type ClaimCategory = "Theft" | "Loss" | "Damage" | "Delay";
+export type ClaimCategory = "Theft" | "Loss" | "Accidental Damage";
 
-export const claimCategoryValues: ClaimCategory[] = [
+export const claimCategoryValues: readonly ClaimCategory[] = [
   "Theft",
   "Loss",
-  "Damage",
-  "Delay",
-];
+  "Accidental Damage",
+] as const;
 
 export type Claim = {
   id: string;
