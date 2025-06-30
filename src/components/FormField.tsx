@@ -16,6 +16,7 @@ export function FormField({ label, htmlFor, error, children }: FormFieldProps) {
       {children}
       <p
         id={`${htmlFor}-error`}
+        data-testid={`${htmlFor}-error`}
         className="claims-error"
         role={error ? "alert" : undefined}
       >
