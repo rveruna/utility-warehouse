@@ -1,10 +1,10 @@
 import { renderHook, act } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useClaimsForm } from '../useClaimsForm';
-import * as validationModule from '../../utils/validation';
+import { useClaimsForm } from './useClaimsForm';
+import * as validationModule from '../utils/validation';
 
 // Mock the validation module
-jest.mock('../../utils/validation');
+jest.mock('../utils/validation');
 const mockValidateClaim = validationModule.validateClaim as jest.MockedFunction<typeof validationModule.validateClaim>;
 
 // Mock axios for useSubmitClaim

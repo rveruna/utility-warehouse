@@ -1,8 +1,8 @@
 import { renderHook } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
-import { useSubmitClaim } from "../useSubmitClaim";
-import type { Claim } from "../../types";
+import { useSubmitClaim } from "./useSubmitClaim";
+import type { Claim } from "../types";
 
 jest.spyOn(console, "log").mockImplementation(() => {});
 jest.spyOn(console, "error").mockImplementation(() => {});

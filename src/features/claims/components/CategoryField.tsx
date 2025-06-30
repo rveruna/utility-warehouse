@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { FormField } from "./FormField";
+import { FormField } from "../../../shared/components/FormField";
 import { claimCategoryValues, type ClaimCategory } from "../types";
 
 interface CategoryFieldProps {

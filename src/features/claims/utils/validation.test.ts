@@ -1,4 +1,4 @@
-import { validateClaim, sanitizeInput } from '../validation';
+import { validateClaim, sanitizeInput } from './validation';
 
 describe('validateClaim', () => {
   describe('date validation', () => {

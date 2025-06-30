@@ -1,5 +1,5 @@
 import "./App.css";
-import { ClaimsForm } from "./components/ClaimsForm";
+import { ClaimsForm } from "./features/claims";
 
 function App() {
   return (

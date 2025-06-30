@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { DescriptionField } from "../DescriptionField";
+import { DescriptionField } from "./DescriptionField";
 import { useRef } from "react";
 
 function DescriptionFieldWithRef() {

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { ClaimsList } from '../ClaimsList';
-import { type Claim } from '../../types';
+import { ClaimsList } from './ClaimsList';
+import { type Claim } from '../types';
 
 describe('ClaimsList', () => {
   const mockClaims: Claim[] = [

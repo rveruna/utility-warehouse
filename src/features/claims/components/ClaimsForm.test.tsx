@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { ClaimsForm } from "../ClaimsForm";
+import { ClaimsForm } from "./ClaimsForm";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
