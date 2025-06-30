@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import { useSubmitClaim } from "../hooks/useSubmitClaim";
 import { claimCategoryValues, type Claim, type ClaimCategory } from "../types";
@@ -9,6 +9,10 @@ export function ClaimsForm() {
   const [category, setCategory] = useState<ClaimCategory | "">("");
   const [description, setDescription] = useState("");
   const [submittedClaims, setSubmittedClaims] = useState<Claim[]>([]);
+
+  const dateInputRef = useRef<HTMLInputElement>(null);
+  const categoryInputRef = useRef<HTMLSelectElement>(null);
+  const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
 
   const [dateError, setDateError] = useState("");
   const [categoryError, setCategoryError] = useState("");
@@ -30,31 +34,23 @@ export function ClaimsForm() {
     setCategoryError("");
     setDescriptionError("");
 
-    const dateInput = document.getElementById("date") as HTMLInputElement;
-    const categoryInput = document.getElementById(
-      "category"
-    ) as HTMLSelectElement;
-    const descriptionInput = document.getElementById(
-      "description"
-    ) as HTMLTextAreaElement;
-
     if (!date) {
       setDateError("Date is required");
-      dateInput?.focus();
+      dateInputRef.current?.focus();
       valid = false;
       return;
     }
 
     if (!category) {
       setCategoryError("Category is required");
-      categoryInput?.focus();
+      categoryInputRef.current?.focus();
       valid = false;
       return;
     }
 
     if (!description) {
       setDescriptionError("Description is required");
-      descriptionInput?.focus();
+      descriptionInputRef.current?.focus();
       valid = false;
       return;
     }
@@ -87,6 +83,7 @@ export function ClaimsForm() {
           </label>
           <input
             id="date"
+            ref={dateInputRef}
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
@@ -110,6 +107,7 @@ export function ClaimsForm() {
           </label>
           <select
             id="category"
+            ref={categoryInputRef}
             value={category}
             onChange={(e) => setCategory(e.target.value as ClaimCategory)}
             required
@@ -139,6 +137,7 @@ export function ClaimsForm() {
           </label>
           <textarea
             id="description"
+            ref={descriptionInputRef}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
