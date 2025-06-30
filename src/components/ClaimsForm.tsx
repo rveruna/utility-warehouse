@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import { useSubmitClaim } from "../hooks/useSubmitClaim";
 import { claimCategoryValues, type Claim, type ClaimCategory } from "../types";
+import { validateClaim } from "../utils/validation";
 import "./ClaimsForm.css";
 
 export function ClaimsForm() {
@@ -29,40 +30,50 @@ export function ClaimsForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    let valid = true;
+    // Clear previous errors
     setDateError("");
     setCategoryError("");
     setDescriptionError("");
 
-    if (!date) {
-      setDateError("Date is required");
-      dateInputRef.current?.focus();
-      valid = false;
-      return;
-    }
-
-    if (!category) {
-      setCategoryError("Category is required");
-      categoryInputRef.current?.focus();
-      valid = false;
-      return;
-    }
-
-    if (!description) {
-      setDescriptionError("Description is required");
-      descriptionInputRef.current?.focus();
-      valid = false;
-      return;
-    }
-
-    if (!valid) return;
-
-    mutation.mutate({
+    // Validate and sanitize input
+    const validationResult = validateClaim({
       date,
-      category: category as ClaimCategory,
-      description,
-      id: "",
+      category,
+      description
     });
+
+    if (!validationResult.success) {
+      const { errors } = validationResult;
+      if (errors) {
+        if (errors.date) {
+          setDateError(errors.date);
+          dateInputRef.current?.focus();
+          return;
+        }
+        if (errors.category) {
+          setCategoryError(errors.category);
+          categoryInputRef.current?.focus();
+          return;
+        }
+        if (errors.description) {
+          setDescriptionError(errors.description);
+          descriptionInputRef.current?.focus();
+          return;
+        }
+      }
+      return;
+    }
+
+    // Use validated and sanitized data
+    const { data: validatedData } = validationResult;
+    if (validatedData) {
+      mutation.mutate({
+        date: validatedData.date,
+        category: validatedData.category as ClaimCategory,
+        description: validatedData.description,
+        id: "",
+      });
+    }
   };
 
   return (
