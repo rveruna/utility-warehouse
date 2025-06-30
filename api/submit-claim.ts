@@ -2,23 +2,17 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { writeFile, appendFile } from "fs/promises";
 import { existsSync } from "fs";
 import path from "path";
-import { validateClaim } from "../src/utils/validation";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const validationResult = validateClaim(req.body);
-  
-  if (!validationResult.success) {
-    return res.status(400).json({ 
-      message: "Validation failed", 
-      errors: validationResult.errors 
-    });
-  }
+  const { date, category, description } = req.body;
 
-  const { date, category, description } = validationResult.data!;
+  if (!date || !category || !description) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
 
   const logLine = `${new Date().toISOString()} | ${date} | ${category} | ${description}\n`;
   const filePath = path.resolve(process.cwd(), "claims.log");

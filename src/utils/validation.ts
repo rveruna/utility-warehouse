@@ -12,12 +12,19 @@ export const sanitizeInput = (input: string): string => {
 
 // Custom validation helpers
 const isValidDate = (dateString: string): boolean => {
-  const date = new Date(dateString);
-  return !isNaN(date.getTime()) && dateString === date.toISOString().split('T')[0];
+  // Check if it matches YYYY-MM-DD format
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+  if (!datePattern.test(dateString)) {
+    return false;
+  }
+  
+  // Check if it's a valid date
+  const date = new Date(dateString + 'T00:00:00');
+  return !isNaN(date.getTime());
 };
 
 const isNotFutureDate = (dateString: string): boolean => {
-  const date = new Date(dateString);
+  const date = new Date(dateString + 'T00:00:00');
   const today = new Date();
   today.setHours(23, 59, 59, 999); // End of today
   return date <= today;
@@ -41,19 +48,18 @@ const containsNoMaliciousContent = (text: string): boolean => {
 export const claimSchema = z.object({
   date: z.string()
     .min(1, 'Date is required')
-    .refine(isValidDate, 'Please enter a valid date')
-    .refine(isNotFutureDate, 'Date cannot be in the future'),
+    .refine((date) => date.length === 0 || isValidDate(date), 'Please enter a valid date')
+    .refine((date) => date.length === 0 || !isValidDate(date) || isNotFutureDate(date), 'Date cannot be in the future'),
   
-  category: z.enum(['Theft', 'Loss', 'Accidental Damage'] as const, {
-    required_error: 'Category is required',
-    invalid_type_error: 'Please select a valid category'
-  }),
+  category: z.string()
+    .min(1, 'Category is required')
+    .refine((cat) => cat === '' || ['Theft', 'Loss', 'Accidental Damage'].includes(cat), 'Please select a valid category'),
   
   description: z.string()
     .min(1, 'Description is required')
-    .min(10, 'Description must be at least 10 characters')
     .max(1000, 'Description cannot exceed 1000 characters')
-    .refine(containsNoMaliciousContent, 'Description contains invalid content')
+    .refine((desc) => desc.length === 0 || desc.length >= 10, 'Description must be at least 10 characters')
+    .refine((desc) => desc.length === 0 || containsNoMaliciousContent(desc), 'Description contains invalid content')
     .transform(sanitizeInput)
 });
 
